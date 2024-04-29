@@ -1,0 +1,17 @@
+# Ignore Visual Studio configuration and metadata files
+.vs/
+.vscode/
+
+# Ignore build artifacts
+bin/
+obj/
+
+# Ignore temporary files
+*.tmp
+*.log
+
+# Ignore personal configuration files
+appsettings.Development.json
+
+# Ignore other directories or files as needed
+node_modules/
