@@ -1,0 +1,6 @@
+@BFCD.Server_HostAddress = http://localhost:5253
+
+GET {{BFCD.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
