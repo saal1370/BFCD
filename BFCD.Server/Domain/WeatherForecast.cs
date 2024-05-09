@@ -1,4 +1,4 @@
-namespace BFCD.Server
+namespace BFCD.Server.Domain
 {
     public class WeatherForecast
     {

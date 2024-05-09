@@ -1,4 +1,5 @@
 
+
 namespace BFCD.Server
 {
     public class Program
@@ -13,6 +14,9 @@ namespace BFCD.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Register the CustomerRepository as a dependency
+            builder.Services.AddSingleton<ICustomerRepository, InMemoryCustomerRep>();
 
             var app = builder.Build();
 

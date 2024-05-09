@@ -1,3 +1,4 @@
+using BFCD.Server.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BFCD.Server.Controllers
