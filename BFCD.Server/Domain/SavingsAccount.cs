@@ -1,19 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BFCD.Server.Domain
 {
-    public class SavingsAcount
+    public class SavingsAccount
     {
-        public int CustomerId { get; set; }
-        public required string Name { get; set; }
-        public required string LastName { get; set; }
-        public DateTime Birthdag { get; set; }
+        [Key]
+        public int AccountId { get; set; }
+        public required string AcountName { get; set; }
+        public required Decimal Balance { get; set; }
 
-        // Navigation property to SavingsAccount
-        //public SavingsAccount? SavingsAccount { get; set; }
+        [ForeignKey(nameof(Customer))]
+        public required Customer Customer { get; set; }
 
-        // Foreign key to SavingsAccount (optional, can also be inferred)
-        //[ForeignKey("SavingsAccount")]
-        //public int SavingsAccountId { get; set; }
+        [ForeignKey(nameof(Transaction))]
+        public required HashSet<Transaction> Transactions { get; set; }
     }
 }

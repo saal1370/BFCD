@@ -7,12 +7,12 @@ namespace BFCD.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CustomerController : ControllerBase
+    public class SavingsAccountController : ControllerBase
     {
         private readonly ICustomerRepository _customerRep;
 
         // Constructor accepting the DbContext as a dependency
-        public CustomerController(ICustomerRepository customerRep)
+        public SavingsAccountController(ICustomerRepository customerRep)
         {
             _customerRep = customerRep;
         }
