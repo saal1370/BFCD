@@ -18,20 +18,12 @@ namespace BFCD.Server.Controllers
         }
 
         [HttpPost("AddCustomers")]
-        public IActionResult AddCustomers(List<Customer> customers)
+        public IActionResult AddCustomers(String name, String lastName, DateTime birthday)
         {
-            if (customers.IsNullOrEmpty())
-            {
-                return BadRequest("Customer cannot be null.");
-            }
-
-            foreach (var customer in customers)
-            {
-                _customerRep.Add(customer);
-            }
+            var customer = _customerRep.Add(name, lastName, birthday);
 
             // Return the created customer with a 201 status and the URL of the created resource
-            return Created(nameof(AddCustomers), customers);
+            return Created(nameof(AddCustomers), customer);
         }
 
         [HttpGet("GetAllCustomers")]

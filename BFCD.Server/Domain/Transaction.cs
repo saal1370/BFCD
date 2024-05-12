@@ -10,14 +10,12 @@ namespace BFCD.Server.Domain
         public DateTime TransactionDate { get; set; }
         public Decimal TransactionAmount { get; set; }
         public Decimal NewBalance { get; set; }
-        public SavingsAccount SavingsAccount { get; set; }
 
-        public Transaction(int transactionId, DateTime transactionDate, decimal transactionAmount, SavingsAccount savingsAccount)
+        public Transaction(DateTime transactionDate, decimal transactionAmount, decimal newBalance)
         {
-            TransactionId = transactionId;
             TransactionDate = transactionDate;
             TransactionAmount = transactionAmount;
-            NewBalance = savingsAccount.Balance;
+            NewBalance = newBalance;
         }
     }
 }

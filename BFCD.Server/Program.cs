@@ -13,7 +13,6 @@ namespace BFCD.Server
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -25,6 +24,7 @@ namespace BFCD.Server
 
             // Register the TransactionRepository as a dependency
             builder.Services.AddSingleton<ITransactionRepository, InMemoryTransactionRep>();
+
             builder.Services.AddSingleton<List<SavingsAccount>>();
 
             var app = builder.Build();

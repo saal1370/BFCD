@@ -18,7 +18,7 @@ public class InMemorySavingsAccountRep : ISavingsAccountRepository
     public SavingsAccount CreateSavingsAccount(int customerId, SavingsAccount savingsAccount)
     {
         var customer = customerRepository.GetById(customerId);
-        var transaction = transactionRepository.CreateTransaction(savingsAccount.Balance, savingsAccount);
+        var transaction = transactionRepository.CreateTransaction(savingsAccount.Balance, savingsAccount.Balance, savingsAccount);
         var transactions = new List<Transaction>();
         transactions.Add(transaction);
 
@@ -55,7 +55,7 @@ public class InMemorySavingsAccountRep : ISavingsAccountRepository
             throw new InvalidOperationException($"Account {accountName} can not be withdrowed by {amount} amount, since negative balance is not allowed");
         savingsAccount.Balance = newBalance;
 
-        var transaction = transactionRepository.CreateTransaction((amount * -1), savingsAccount);
+        var transaction = transactionRepository.CreateTransaction((amount * -1), savingsAccount.Balance, savingsAccount);
         savingsAccount.Transactions.Add(transaction);
         
         return transaction;
@@ -78,7 +78,7 @@ public class InMemorySavingsAccountRep : ISavingsAccountRepository
         var newBalance = savingsAccount.Balance + amount;
         savingsAccount.Balance = newBalance;
 
-        var transaction = transactionRepository.CreateTransaction(amount, savingsAccount);
+        var transaction = transactionRepository.CreateTransaction(amount, savingsAccount.Balance, savingsAccount);
         savingsAccount.Transactions.Add(transaction);
 
         return transaction;

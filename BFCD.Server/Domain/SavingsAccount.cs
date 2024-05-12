@@ -10,8 +10,6 @@ namespace BFCD.Server.Domain
         public string AcountName { get; set; }
         public Decimal Balance { get; set; }
 
-        public Customer Customer { get; set; } = new Customer();
-
         [ForeignKey(nameof(Transaction))]
         public List<Transaction> Transactions { get; set; }
     }

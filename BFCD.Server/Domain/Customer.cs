@@ -16,7 +16,13 @@ namespace BFCD.Server.Domain
         public DateTime Birthdag { get; set; }
 
         [ForeignKey(nameof(SavingsAccount))]
-        [JsonIgnore]
-        public List<SavingsAccount> SavingsAccounts { get; set; } = new List<SavingsAccount>();
+        public List<SavingsAccount> SavingsAccounts { get; set; } 
+
+        public Customer(String name, String lastName, DateTime birthday)
+        {
+            Name = name;
+            LastName = lastName;
+            Birthdag = birthday;
+        }
     }
 }

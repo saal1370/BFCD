@@ -21,14 +21,16 @@ public class InMemoryCustomerRep : ICustomerRepository
         return customer;
     }
 #pragma warning restore CS8603 // Possible null reference return.
-    public void Add(Customer customer)
+    public Customer Add(String name, String lastName, DateTime birthday)
     {
+        var customer = new Customer(name, lastName, birthday);  
         if (customers.Any())
             customer.CustomerId = customers.Max(c => c.CustomerId) + 1;
         else
             customer.CustomerId = 1;
 
         customers.Add(customer);
+        return customer;
     }
 
     public void Update(Customer customer)

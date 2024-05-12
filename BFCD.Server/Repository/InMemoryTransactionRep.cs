@@ -5,7 +5,7 @@ public class InMemoryTransactionRep : ITransactionRepository
 {
     private readonly List<Transaction> transactions = new();
 
-    private int SetTransactionID()
+    private int SetTransactionID(List<Transaction> transactions)
     {
         if (transactions.Any())
             return transactions.Max(t => t.TransactionId) + 1;
@@ -13,10 +13,10 @@ public class InMemoryTransactionRep : ITransactionRepository
             return 1;
     }
 
-    public Transaction CreateTransaction(decimal amount, SavingsAccount savingsAccount)
+    public Transaction CreateTransaction(decimal amount, decimal newBalance, SavingsAccount savingsAccount)
     {
-        int newTransactionId = SetTransactionID();
-        var transaction = new Transaction(newTransactionId, DateTime.Now, amount, savingsAccount);
+        var transaction = new Transaction(DateTime.Now, amount, newBalance);
+        transaction.TransactionId = SetTransactionID(savingsAccount.Transactions); ;
 
         return transaction;
     }

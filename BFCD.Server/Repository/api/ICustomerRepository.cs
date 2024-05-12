@@ -5,7 +5,7 @@ public interface ICustomerRepository
 {
     IEnumerable<Customer> GetAll();
     Customer GetById(int id);
-    void Add(Customer customer);
+    Customer Add(String name, String lastName, DateTime birthday);
     void Update(Customer customer);
     void Delete(int customer);
 }
