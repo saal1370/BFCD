@@ -1,5 +1,3 @@
-
-
 using BFCD.Server.Domain;
 
 public class InMemoryCustomerRep : ICustomerRepository
@@ -41,7 +39,8 @@ public class InMemoryCustomerRep : ICustomerRepository
             existingCustomer.Name = customer.Name;
             existingCustomer.LastName = customer.LastName;
             existingCustomer.Birthdag = customer.Birthdag;
-        }
+        } else
+            throw new BadHttpRequestException($"Customer with ID {customer.CustomerId} not found.");
     }
 
     public void Delete(int customerId)
@@ -50,6 +49,7 @@ public class InMemoryCustomerRep : ICustomerRepository
         if (customer != null)
         {
             customers.Remove(customer);
-        }
+        } else
+            throw new BadHttpRequestException($"Customer with ID {customerId} not found.");
     }
 }

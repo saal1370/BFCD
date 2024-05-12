@@ -12,5 +12,13 @@ namespace BFCD.Server.Domain
 
         [ForeignKey(nameof(Transaction))]
         public List<Transaction> Transactions { get; set; }
+
+        public SavingsAccount(int accountId, string acountName, Decimal balance, List<Transaction> transactions) 
+        { 
+            AccountId = accountId;
+            AcountName = acountName;
+            Balance = balance;
+            Transactions = transactions;
+        }
     }
 }

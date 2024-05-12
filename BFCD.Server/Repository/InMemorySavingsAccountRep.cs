@@ -49,6 +49,8 @@ public class InMemorySavingsAccountRep : ISavingsAccountRepository
     {
         var customer = customerRepository.GetById(customerId);
         var savingsAccount = customer.SavingsAccounts.FirstOrDefault(sa => sa.AcountName.Equals(accountName));
+        if (savingsAccount == null)
+            throw new BadHttpRequestException($"Customer with ID {customerId} does not have a savings account named {accountName}");
 
         var newBalance = savingsAccount.Balance - amount;
         if (newBalance < 0)
@@ -74,6 +76,8 @@ public class InMemorySavingsAccountRep : ISavingsAccountRepository
     {
         var customer = customerRepository.GetById(customerId);
         var savingsAccount = customer.SavingsAccounts.FirstOrDefault(sa => sa.AcountName.Equals(accountName));
+        if (savingsAccount == null)
+            throw new BadHttpRequestException($"Customer with ID {customerId} does not have a savings account named {accountName}");
 
         var newBalance = savingsAccount.Balance + amount;
         savingsAccount.Balance = newBalance;

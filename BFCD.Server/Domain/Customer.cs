@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using NSwag.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
