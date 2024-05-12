@@ -9,21 +9,15 @@ namespace BFCD.Server.Domain
         public int TransactionId { get; set; }
         public DateTime TransactionDate { get; set; }
         public Decimal TransactionAmount { get; set; }
-
-        [ForeignKey(nameof(SavingsAccount))]
+        public Decimal NewBalance { get; set; }
         public SavingsAccount SavingsAccount { get; set; }
 
-        [ForeignKey(nameof(Customer))]
-        public Customer Customer { get; set; }
-
-        public Transaction(int transactionId, DateTime transactionDate, decimal transactionAmount, Customer customer, SavingsAccount savingsAccount)
+        public Transaction(int transactionId, DateTime transactionDate, decimal transactionAmount, SavingsAccount savingsAccount)
         {
             TransactionId = transactionId;
             TransactionDate = transactionDate;
             TransactionAmount = transactionAmount;
-            Customer = customer;
-            SavingsAccount = savingsAccount;
+            NewBalance = savingsAccount.Balance;
         }
-        public Transaction() { }
     }
 }

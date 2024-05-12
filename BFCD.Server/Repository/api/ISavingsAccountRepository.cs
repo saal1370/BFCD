@@ -3,12 +3,8 @@ using BFCD.Server.Domain;
 
 public interface ISavingsAccountRepository
 {
-    IEnumerable<Customer> GetAll();
-    SavingsAccount GetById(int id);
-    SavingsAccount GetByName(string name);
-    List<SavingsAccount> GetByCustomerId(int customerId);
-    void CreateSavingsAccount(int customerId, SavingsAccount savingsAccount);
-    Decimal GetBalanceById(int id);
-    Decimal DepositToSavingsAccount(SavingsAccount savingsAccount);
-    Decimal WidthdrowFromSavingsAccount(SavingsAccount savingsAccount);
+    SavingsAccount CreateSavingsAccount(int customerId, SavingsAccount savingsAccount);
+    Transaction DepositToSavingsAccount(int customerId, String accountName, decimal amount);
+    Transaction WidthdrowFromSavingsAccount(int customerId, String accountName, decimal amount);
+    IEnumerable<Transaction> GetLastTenTransactions(int customerId, String accountName);
 }

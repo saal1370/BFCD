@@ -18,7 +18,7 @@ namespace BFCD.Server.Controllers
         }
 
         [HttpPost("AddCustomers")]
-        public IActionResult AddCustomers([FromBody] List<Customer> customers)
+        public IActionResult AddCustomers(List<Customer> customers)
         {
             if (customers.IsNullOrEmpty())
             {

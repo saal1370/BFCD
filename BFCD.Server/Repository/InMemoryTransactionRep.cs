@@ -13,10 +13,10 @@ public class InMemoryTransactionRep : ITransactionRepository
             return 1;
     }
 
-    public Transaction CreateTransaction(decimal amount, Customer customer, SavingsAccount savingsAccount)
+    public Transaction CreateTransaction(decimal amount, SavingsAccount savingsAccount)
     {
         int newTransactionId = SetTransactionID();
-        var transaction = new Transaction(newTransactionId, DateTime.Now, amount, customer, savingsAccount);
+        var transaction = new Transaction(newTransactionId, DateTime.Now, amount, savingsAccount);
 
         return transaction;
     }

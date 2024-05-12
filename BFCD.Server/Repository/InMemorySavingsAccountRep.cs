@@ -1,56 +1,86 @@
 
 using BFCD.Server.Domain;
+using Microsoft.IdentityModel.Tokens;
 
 public class InMemorySavingsAccountRep : ISavingsAccountRepository
 {
-    private readonly List<SavingsAccount> savingsAccounts = new();
+    private readonly List<SavingsAccount> savingsAccounts;
     private readonly ICustomerRepository customerRepository;
-    public void CreateSavingsAccount(int customerId, SavingsAccount savingsAccount)
-    {
-        if (savingsAccounts.Any())
-            savingsAccount.AccountId = savingsAccounts.Max(sa => sa.AccountId) + 1;
-        else
-            savingsAccount.AccountId = 1;
+    private readonly ITransactionRepository transactionRepository;
 
+    public InMemorySavingsAccountRep(List<SavingsAccount> savingsAccounts, ICustomerRepository customerRepository, ITransactionRepository transactionRepository)
+    {
+        this.savingsAccounts = savingsAccounts;
+        this.customerRepository = customerRepository;
+        this.transactionRepository = transactionRepository;
+    }
+
+    public SavingsAccount CreateSavingsAccount(int customerId, SavingsAccount savingsAccount)
+    {
         var customer = customerRepository.GetById(customerId);
-        savingsAccount.Customer = customer;
-        customer.SavingsAccount = savingsAccount;
+        var transaction = transactionRepository.CreateTransaction(savingsAccount.Balance, savingsAccount);
+        var transactions = new List<Transaction>();
+        transactions.Add(transaction);
+
+        savingsAccount.AccountId = SetSavingsAccountId();
+        savingsAccount.Transactions = transactions;
+
+        if (customer.SavingsAccounts.IsNullOrEmpty()) 
+        {
+            var newSavingsAccounts = new List<SavingsAccount>();
+            newSavingsAccounts.Add(savingsAccount);
+            customer.SavingsAccounts = newSavingsAccounts;
+        } else
+            customer.SavingsAccounts.Add(savingsAccount);
 
         savingsAccounts.Add(savingsAccount);
+        return savingsAccount;
     }
 
-    public decimal DepositToSavingsAccount(SavingsAccount savingsAccount)
+    private int SetSavingsAccountId() 
     {
-        throw new NotImplementedException();
+        if (savingsAccounts.Any())
+            return savingsAccounts.Max(sa => sa.AccountId) + 1;
+        else
+            return 1;
     }
 
-    public IEnumerable<Customer> GetAll()
+    public Transaction WidthdrowFromSavingsAccount(int customerId, String accountName, decimal amount)
     {
-        throw new NotImplementedException();
+        var customer = customerRepository.GetById(customerId);
+        var savingsAccount = customer.SavingsAccounts.FirstOrDefault(sa => sa.AcountName.Equals(accountName));
+
+        var newBalance = savingsAccount.Balance - amount;
+        if (newBalance < 0)
+            throw new InvalidOperationException($"Account {accountName} can not be withdrowed by {amount} amount, since negative balance is not allowed");
+        savingsAccount.Balance = newBalance;
+
+        var transaction = transactionRepository.CreateTransaction((amount * -1), savingsAccount);
+        savingsAccount.Transactions.Add(transaction);
+        
+        return transaction;
     }
 
-    public decimal GetBalanceById(int id)
+    public IEnumerable<Transaction> GetLastTenTransactions(int customerId, String accountName)
     {
-        throw new NotImplementedException();
+        var customer = customerRepository.GetById(customerId);
+        var savingsAccount = customer.SavingsAccounts.FirstOrDefault(sa => sa.AcountName.Equals(accountName));
+
+        var lastTenTransactions = savingsAccount.Transactions.OrderByDescending(t => t.TransactionDate).Take(10).ToList();
+        return lastTenTransactions;
     }
 
-    public List<SavingsAccount> GetByCustomerId(int customerId)
+    public Transaction DepositToSavingsAccount(int customerId, String accountName, decimal amount)
     {
-        throw new NotImplementedException();
-    }
+        var customer = customerRepository.GetById(customerId);
+        var savingsAccount = customer.SavingsAccounts.FirstOrDefault(sa => sa.AcountName.Equals(accountName));
 
-    public SavingsAccount GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
+        var newBalance = savingsAccount.Balance + amount;
+        savingsAccount.Balance = newBalance;
 
-    public SavingsAccount GetByName(string name)
-    {
-        throw new NotImplementedException();
-    }
+        var transaction = transactionRepository.CreateTransaction(amount, savingsAccount);
+        savingsAccount.Transactions.Add(transaction);
 
-    public decimal WidthdrowFromSavingsAccount(SavingsAccount savingsAccount)
-    {
-        throw new NotImplementedException();
+        return transaction;
     }
 }

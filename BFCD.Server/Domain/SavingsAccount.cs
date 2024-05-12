@@ -7,13 +7,12 @@ namespace BFCD.Server.Domain
     {
         [Key]
         public int AccountId { get; set; }
-        public required string AcountName { get; set; }
-        public required Decimal Balance { get; set; }
+        public string AcountName { get; set; }
+        public Decimal Balance { get; set; }
 
-        [ForeignKey(nameof(Customer))]
-        public required Customer Customer { get; set; }
+        public Customer Customer { get; set; } = new Customer();
 
         [ForeignKey(nameof(Transaction))]
-        public required HashSet<Transaction> Transactions { get; set; }
+        public List<Transaction> Transactions { get; set; }
     }
 }

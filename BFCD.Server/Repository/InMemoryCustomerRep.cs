@@ -7,8 +7,19 @@ public class InMemoryCustomerRep : ICustomerRepository
     private readonly List<Customer> customers = new(); 
 
     public IEnumerable<Customer> GetAll() => customers;
-#pragma warning disable CS8603 // Possible null reference return.
-    public Customer GetById(int id) => customers.FirstOrDefault(c => c.CustomerId == id);
+
+    public Customer GetById(int id)
+    {
+        var customer = customers.FirstOrDefault(c => c.CustomerId == id);
+
+        if (customer == null)
+        {
+            // If customer is null, throw BadRequestException
+            throw new BadHttpRequestException($"Customer with ID {id} not found.");
+        }
+
+        return customer;
+    }
 #pragma warning restore CS8603 // Possible null reference return.
     public void Add(Customer customer)
     {

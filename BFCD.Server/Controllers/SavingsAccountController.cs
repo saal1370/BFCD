@@ -9,72 +9,42 @@ namespace BFCD.Server.Controllers
     [Route("[controller]")]
     public class SavingsAccountController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRep;
+        private readonly ISavingsAccountRepository _savingsAccountRep;
 
         // Constructor accepting the DbContext as a dependency
-        public SavingsAccountController(ICustomerRepository customerRep)
+        public SavingsAccountController(ISavingsAccountRepository savingsAccountRep)
         {
-            _customerRep = customerRep;
+            _savingsAccountRep = savingsAccountRep;
         }
 
-        [HttpPost("AddCustomers")]
-        public IActionResult AddCustomers([FromBody] List<Customer> customers)
+        [HttpPost("CreateSavingsAccount")]
+        public IActionResult CreateSavingsAccount(int customerId, [FromBody] SavingsAccount savingsAccount)
         {
-            if (customers.IsNullOrEmpty())
-            {
-                return BadRequest("Customer cannot be null.");
-            }
-
-            foreach (var customer in customers)
-            {
-                _customerRep.Add(customer);
-            }
-
-            // Return the created customer with a 201 status and the URL of the created resource
-            return Created(nameof(AddCustomers), customers);
+            var newSavingsAccount = _savingsAccountRep.CreateSavingsAccount(customerId, savingsAccount);
+            return Created(nameof(CreateSavingsAccount), newSavingsAccount);
         }
 
-        [HttpGet("GetAllCustomers")]
-        public IActionResult GetAllCustomers()
+        [HttpGet("GetLastTenTransactions")]
+        public IActionResult GetLastTenTransactions(int customerId, String accountName)
         {
-            // Query the database for all customers
-            var customers = _customerRep.GetAll();
-
-            // Return the list of customers
-            return Ok(customers);
+            var transactions = _savingsAccountRep.GetLastTenTransactions(customerId, accountName);
+            return Ok(transactions);
         }
 
-        [HttpGet("GetCustomerById")]
-        public IActionResult GetCustomerById(int id)
+        [HttpPost("DepositeToSavingAccount")]
+        public IActionResult UpdateCustomer(int customerId, String accountName, decimal amount)
         {
-            // Query the database for unique customer
-            var customer = _customerRep.GetById(id);
-
-            // Return the unique customer
-            return Ok(customer);
+            var transaction = _savingsAccountRep.DepositToSavingsAccount(customerId, accountName, amount);
+            return Ok(transaction);
         }
 
-        [HttpPost("UpdateCustomer")]
-        public IActionResult UpdateCustomer(Customer customer)
+        [HttpPost("WithdrowFromSavingsAccount")]
+        public IActionResult WithdrowFromSavingsAccount(int customerId, String accountName, decimal amount)
         {
-            // Query the database to update a customer
-            _customerRep.Update(customer);
+            var transaction = _savingsAccountRep.WidthdrowFromSavingsAccount(customerId, accountName, amount);
 
             // Return the unique updated customer
-            return Ok(customer);
-        }
-
-        [HttpPost("DeleteCustomers")]
-        public IActionResult DeleteCustomers([FromBody] List<int> customers)
-        {
-            // Query the database to delete one or more customers
-            foreach (var customer in customers)
-            {
-                _customerRep.Delete(customer);
-            }
-
-            // Return 200 Ok result
-            return Ok();
+            return Ok(transaction);
         }
 
     }
